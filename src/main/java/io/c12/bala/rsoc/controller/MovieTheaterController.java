@@ -18,13 +18,14 @@ import java.util.function.Function;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@MessageMapping("ticket.v1")
 public class MovieTheaterController {
     private final MovieService movieService;
 
     /**
      * Fire and Forget.
      */
-    @MessageMapping("ticket.cancel")
+    @MessageMapping("cancel")
     public void cancelTicket(Mono<TicketRequest> request){
         // cancel and refund asynchronously
         request
@@ -36,7 +37,7 @@ public class MovieTheaterController {
     /**
      * Request Response
      */
-    @MessageMapping("ticket.purchase")
+    @MessageMapping("purchase")
     public Mono<TicketRequest> purchaseTicket(Mono<TicketRequest> request){
         return request
                 .doOnNext(t -> t.setStatus(TicketStatus.ISSUED))
@@ -47,7 +48,7 @@ public class MovieTheaterController {
     /**
      * Request Response Stream
      */
-    @MessageMapping("movie.stream")
+    @MessageMapping("stream")
     public Flux<MovieScene> playMovie(Mono<TicketRequest> request){
         return request
                 .map(t -> t.getStatus().equals(TicketStatus.ISSUED) ? movieService.getScenes() : Collections.emptyList())

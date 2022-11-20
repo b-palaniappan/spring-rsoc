@@ -11,11 +11,12 @@ import java.time.Duration;
 
 @Controller
 @RequiredArgsConstructor
+@MessageMapping("tv.v1")
 public class TVController {
 
     private final MovieService movieService;
 
-    @MessageMapping("tv.movie")
+    @MessageMapping("movie")
     public Flux<MovieScene> playMovie(Flux<Integer> sceneIndex) {
         return sceneIndex
                 .map(index -> index - 1)
